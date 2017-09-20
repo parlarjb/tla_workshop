@@ -1,3 +1,5 @@
+\* This code originally comes from Leslie Lamport's video series
+\* http://lamport.azurewebsites.net/video/videos.html
 ------------------------------ MODULE TCommit ------------------------------
 (***************************************************************************)
 (* This specification is explained in "Transaction Commit", Lecture 5 of   *)

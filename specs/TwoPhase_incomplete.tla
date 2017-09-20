@@ -86,19 +86,12 @@ TMCommit ==
   (* The TM commits the transaction; enabled iff the TM is in its initial  *)
   (* state and every RM has sent a "Prepared" message.                     *)
   (*************************************************************************)
-  /\ tmState = "init"
-  /\ tmPrepared = RM
-  /\ tmState' = "done"
-  /\ msgs' = msgs \union {[type |-> "Commit"]}
   /\ UNCHANGED <<rmState, tmPrepared>>
 
 TMAbort ==
   (*************************************************************************)
   (* The TM spontaneously aborts the transaction.                          *)
   (*************************************************************************)
-  /\ tmState = "init"
-  /\ tmState' = "done"
-  /\ msgs' = msgs \union {[type |-> "Abort"]}
   /\ UNCHANGED <<rmState, tmPrepared>>
 
 RMPrepare(r) == 
@@ -115,24 +108,18 @@ RMChooseToAbort(r) ==
   (* Resource manager r spontaneously decides to abort.  As noted above, r *)
   (* does not send any message in our simplified spec.                     *)
   (*************************************************************************)
-  /\ rmState[r] = "working"
-  /\ rmState' = [rmState EXCEPT ![r] = "aborted"]
   /\ UNCHANGED <<tmState, tmPrepared, msgs>>
 
 RMRcvCommitMsg(r) ==
   (*************************************************************************)
   (* Resource manager r is told by the TM to commit.                       *)
   (*************************************************************************)
-  /\ [type |-> "Commit"] \in msgs
-  /\ rmState' = [rmState EXCEPT ![r] = "committed"]
   /\ UNCHANGED <<tmState, tmPrepared, msgs>>
 
 RMRcvAbortMsg(r) ==
   (*************************************************************************)
   (* Resource manager r is told by the TM to abort.                        *)
   (*************************************************************************)
-  /\ [type |-> "Abort"] \in msgs
-  /\ rmState' = [rmState EXCEPT ![r] = "aborted"]
   /\ UNCHANGED <<tmState, tmPrepared, msgs>>
 
 TPNext ==
